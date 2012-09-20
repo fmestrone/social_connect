@@ -33,6 +33,11 @@ function elgg_social_handle_authentication($user_profile, $provider) {
 
 		// check whether the user already exists with the email provided
 		$useremail = $user_profile->email;
+		if ( !$useremail ) {
+			register_error(sprintf(elgg_echo('jasl:connect:bad'), $provider_name));
+			return;
+		}
+
 		$users = get_user_by_email($useremail);
 		if ( $users ) {
 			// if so, then connect the existing user to the social profile
