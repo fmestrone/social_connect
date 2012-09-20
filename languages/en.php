@@ -37,5 +37,12 @@ $localized = array(
 	'jasl:connect:link_title' => 'Connect with %s',
 	'jasl:connect:connect_with' => 'Or connect with ',
 	'jasl:connect:privacy' => 'Privacy',
+	'jasl:register:bad' => 'Could not register with %s',
+	'jasl:register:ok' => 'A new user account has been created from your %s account.',
+	'jasl:connect:ok' => 'Your Elgg user account has been connected to your %s account.',
+	'jasl:login:ok' => 'You have signed in with %s',
+	'jasl:login:bad' => 'Unable to sign you in with %s',
+	'jasl:authenticate:loading' => 'Loading...',
+	'jasl:authenticate:contacting' => 'Contacting <b>%s</b>, please wait...',
 );
 add_translation('en', $localized);

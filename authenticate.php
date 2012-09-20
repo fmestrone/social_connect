@@ -12,6 +12,8 @@ global $CONFIG;
 $assets_base_url  = "{$CONFIG->url}mod/elgg_social_login/";
 $assets_base_path = "{$CONFIG->pluginspath}elgg_social_login/";
 $provider = @trim(strip_tags($_GET['provider']));
+require "{$CONFIG->pluginspath}elgg_social_login/settings.php";
+$provider_name = $HA_SOCIAL_LOGIN_PROVIDERS_CONFIG[$provider]['provider_name'];
 
 // let's display a loading message... better than a white screen
 if ( isset($_GET['provider']) && !isset($_GET['redirect_to_provider']) ) {
@@ -28,10 +30,10 @@ if ( isset($_GET['provider']) && !isset($_GET['redirect_to_provider']) ) {
 		<td align="center" height="200px" valign="middle"><img src="<?php echo $assets_base_url ; ?>graphics/loading.gif" /></td>
 	  </tr>
 	  <tr>
-		<td align="center"><br /><h3>Loading...</h3><br /></td> 
+		<td align="center"><br /><h3><?php echo elgg_echo('jasl:authenticate:loading'); ?></h3><br /></td> 
 	  </tr>
 	  <tr>
-		<td align="center">Contacting <b><?php echo ucfirst($provider); ?></b>, please wait...</td>
+		<td align="center"><?php echo sprintf(elgg_echo('jasl:authenticate:contacting'), $provider_name); ?></td>
 	  </tr>
 	</table>
 	<script> 
@@ -164,7 +166,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 						  <br />
 
 						  <div id="bug_report">
-							  <form method="post" action="http://hybridauth.sourceforge.net/reports/index.php?product=elgg-plugin-1.8&v=1.0.2">
+							  <form method="post" action="http://hybridauth.sourceforge.net/reports/index.php?product=jasl&v=1.0">
 								  <table width="90%" border="0">
 									  <tr>
 										  <td align="left" valign="top">
