@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div class="wrap">
-		<h2>Social Login Plugin Diagnostics</h2> 
+		<h2>Social Connect Plugin Diagnostics</h2>
 		
 		<p>
 			<h3>1. URL Rewrite</h3> 

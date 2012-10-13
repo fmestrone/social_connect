@@ -1,20 +1,20 @@
 <?php
 global $CONFIG;
-global $HA_SOCIAL_LOGIN_PROVIDERS_CONFIG;
+global $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG;
 
-require_once "{$CONFIG->pluginspath}elgg_social_login/settings.php";
+require_once "{$CONFIG->pluginspath}social_connect/settings.php";
 
 // display provider icons
 $connect_with = '';
-foreach ( $HA_SOCIAL_LOGIN_PROVIDERS_CONFIG AS $item ) {
+foreach ( $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG AS $item ) {
 	$provider_id     = @$item['label'];
 	$provider_name   = @$item['provider_name'];
 
-	$link_title = elgg_echo('jasl:connect:link_title', array($provider_name));
+	$link_title = elgg_echo('social_connect:connect:link_title', array($provider_name));
 
-	$assets_base_url = "{$vars['url']}mod/elgg_social_login/graphics/";
+	$assets_base_url = "{$vars['url']}mod/social_connect/graphics/";
 
-	if ( get_plugin_setting("ha_settings_{$provider_id}_enabled", 'elgg_social_login') ) {
+	if ( elgg_get_plugin_setting("ha_settings_{$provider_id}_enabled", 'social_connect') ) {
 		$connect_with .= "<a href=\"javascript:void(0);\" title=\"$link_title\" class=\"ha_connect_with_provider\" data-provider=\"$provider_id\">";
 		$connect_with .= "<img alt=\"$provider_name\" title=\"$provider_name\" src=\"{$assets_base_url}32x32/" . strtolower($provider_id) . ".png\" />";
 		$connect_with .= "</a> \n";
@@ -24,16 +24,16 @@ foreach ( $HA_SOCIAL_LOGIN_PROVIDERS_CONFIG AS $item ) {
 if ( !empty($connect_with) ) {
 	// provide popup url for hybridauth callback
 	?>
-	<div class="elgg_social_login_site_connect">
-		<div><b><?php echo elgg_echo('jasl:connect:connect_with'); ?></b></div>
+	<div class="social_connect_site_connect">
+		<div><b><?php echo elgg_echo('social_connect:connect:connect_with'); ?></b></div>
 	<?php echo $connect_with ?>
-	<input id="ha_popup_base_url" type="hidden" value="<?php echo "{$vars['url']}mod/elgg_social_login/"; ?>authenticate.php?" />
+	<input id="ha_popup_base_url" type="hidden" value="<?php echo "{$vars['url']}mod/social_connect/"; ?>authenticate.php?" />
 	<p>
 	<?php
 	// link attribution && privacy page 
-	if ( get_plugin_setting('ha_settings_privacy_page', 'elgg_social_login' ) ) {
+	if ( elgg_get_plugin_setting('ha_settings_privacy_page', 'social_connect' ) ) {
 		?>
-			<a href="<?php echo get_plugin_setting( 'ha_settings_privacy_page', 'elgg_social_login' ) ?>" target="_blank"><?php echo elgg_echo('jasl:connect:privacy'); ?></a>
+			<a href="<?php echo elgg_get_plugin_setting('ha_settings_privacy_page','social_connect') ?>" target="_blank"><?php echo elgg_echo('social_connect:connect:privacy'); ?></a>
 		<?
 	}
 	?>

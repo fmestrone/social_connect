@@ -5,7 +5,7 @@
  * 
  */
 
-$HA_SOCIAL_LOGIN_PROVIDERS_CONFIG = array(
+$HA_SOCIAL_CONNECT_PROVIDERS_CONFIG = array(
 	'Facebook' => ARRAY( 
 		"label"             => "Facebook",
 		"provider_name"     => "Facebook", 

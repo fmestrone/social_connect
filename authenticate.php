@@ -9,11 +9,11 @@ restore_error_handler();
 restore_exception_handler();
 
 global $CONFIG;
-$assets_base_url  = "{$CONFIG->url}mod/elgg_social_login/";
-$assets_base_path = "{$CONFIG->pluginspath}elgg_social_login/";
+$assets_base_url  = "{$CONFIG->url}mod/social_connect/";
+$assets_base_path = "{$CONFIG->pluginspath}social_connect/";
 $provider = @trim(strip_tags($_GET['provider']));
-require "{$CONFIG->pluginspath}elgg_social_login/settings.php";
-$provider_name = $HA_SOCIAL_LOGIN_PROVIDERS_CONFIG[$provider]['provider_name'];
+require "{$assets_base_path}settings.php";
+$provider_name = $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider]['provider_name'];
 
 // let's display a loading message... better than a white screen
 if ( isset($_GET['provider']) && !isset($_GET['redirect_to_provider']) ) {
@@ -30,10 +30,10 @@ if ( isset($_GET['provider']) && !isset($_GET['redirect_to_provider']) ) {
 		<td align="center" height="200px" valign="middle"><img src="<?php echo $assets_base_url ; ?>graphics/loading.gif" /></td>
 	  </tr>
 	  <tr>
-		<td align="center"><br /><h3><?php echo elgg_echo('jasl:authenticate:loading'); ?></h3><br /></td> 
+		<td align="center"><br /><h3><?php echo elgg_echo('social_connect:authenticate:loading'); ?></h3><br /></td>
 	  </tr>
 	  <tr>
-		<td align="center"><?php echo sprintf(elgg_echo('jasl:authenticate:contacting'), $provider_name); ?></td>
+		<td align="center"><?php echo sprintf(elgg_echo('social_connect:authenticate:contacting'), $provider_name); ?></td>
 	  </tr>
 	</table>
 	<script> 
@@ -61,8 +61,8 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 	// load hybridauth
 	require_once("{$assets_base_path}vendors/hybridauth/Hybrid/Auth.php");
 
-	// build required configuratoin for this provider
-	if ( !get_plugin_setting("ha_settings_{$provider}_enabled", 'elgg_social_login') ) {
+	// build required configuration for this provider
+	if ( !elgg_get_plugin_setting("ha_settings_{$provider}_enabled", 'social_connect') ) {
 		throw new Exception( 'Unknown or disabled provider' );
 	}
 
@@ -70,7 +70,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 
 	$config['base_url'] = $assets_base_url;
 
-	if ( get_plugin_setting('ha_settings_test_mode', 'elgg_social_login') ) {
+	if ( elgg_get_plugin_setting('ha_settings_test_mode', 'social_connect') ) {
 		$config['debug_mode'] = true;
 		$config['debug_file'] = $assets_base_path . 'log/debug.log';
 	}
@@ -81,17 +81,17 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 	$providerConfig['enabled'] = true;
 
 	// provider application id ?
-	if ( ($appid = get_plugin_setting("ha_settings_{$provider}_app_id", 'elgg_social_login')) ) {
+	if ( ($appid = elgg_get_plugin_setting("ha_settings_{$provider}_app_id", 'social_connect')) ) {
 		$providerConfig['keys']['id'] = $appid;
 	}
 
 	// provider application key ?
-	if ( ($appkey = get_plugin_setting("ha_settings_{$provider}_app_key", 'elgg_social_login')) ) {
+	if ( ($appkey = elgg_get_plugin_setting("ha_settings_{$provider}_app_key", 'social_connect')) ) {
 		$providerConfig['keys']['key'] = $appkey;
 	}
 
 	// provider application secret ?
-	if ( ($appsecret = get_plugin_setting("ha_settings_{$provider}_app_secret", 'elgg_social_login')) ) {
+	if ( ($appsecret = elgg_get_plugin_setting("ha_settings_{$provider}_app_secret", 'social_connect')) ) {
 		$providerConfig['keys']['secret'] = $appsecret;
 	}
 	
@@ -102,7 +102,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 
 	$config['providers'] = array($provider => $providerConfig);
 
-	// start login with facebook?
+	// start social connection with provider
 	try {
 		$hybridauth = new Hybrid_Auth($config);
 
@@ -110,7 +110,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 
 		$user_profile = $adapter->getUserProfile();
 
-		elgg_social_handle_authentication($user_profile, $provider);
+        social_connect_handle_authentication($user_profile, $provider);
 ?>
 		<html>
 		<head>
@@ -129,7 +129,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 		$message = 'Unspecified error!';
 		switch ( $e->getCode() ) {
 			case 0 : $message = 'Unspecified error.'; break;
-			case 1 : $message = 'Hybriauth configuration error.'; break;
+			case 1 : $message = 'HybridAuth configuration error.'; break;
 			case 2 : $message = 'Provider not properly configured.'; break;
 			case 3 : $message = 'Unknown or disabled provider.'; break;
 			case 4 : $message = 'Missing provider application credentials.'; break;
@@ -155,7 +155,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 			<td align="center">&nbsp;<?php echo $message ; ?></td> 
 		  </tr>
 		<?php 
-			if( get_plugin_setting( 'ha_settings_test_mode', 'elgg_social_login' ) ){
+			if ( elgg_get_plugin_setting('ha_settings_test_mode', 'social_connect') ) {
 		?>
 				<tr>
 				  <td align="center"> 
@@ -166,7 +166,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 						  <br />
 
 						  <div id="bug_report">
-							  <form method="post" action="http://hybridauth.sourceforge.net/reports/index.php?product=jasl&v=1.0">
+							  <form method="post" action="http://hybridauth.sourceforge.net/reports/index.php?product=social_connect&v=1.0">
 								  <table width="90%" border="0">
 									  <tr>
 										  <td align="left" valign="top">

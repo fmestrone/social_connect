@@ -1,25 +1,35 @@
 <?php
-register_elgg_event_handler('init', 'system', 'elgg_social_login_init');
+elgg_register_event_handler('init', 'system', 'social_connect_init');
 
-function elgg_social_login_init() {
-	elgg_extend_view('forms/login'   , 'elgg_social_login/connect');
-	elgg_extend_view('forms/register', 'elgg_social_login/connect', '499');
-	elgg_extend_view('css/admin'     , 'elgg_social_login/admincss');
-	elgg_extend_view('css/elgg'      , 'elgg_social_login/css');
+function social_connect_init() {
+	elgg_extend_view('forms/login'   , 'social_connect/connect');
+	elgg_extend_view('forms/register', 'social_connect/connect', '499');
+	elgg_extend_view('css/admin'     , 'social_connect/admincss');
+	elgg_extend_view('css/elgg'      , 'social_connect/css');
 }
 
-function elgg_social_handle_authentication($user_profile, $provider) {
+function social_connect_handle_authentication($user_profile, $provider) {
 	global $CONFIG;
+    $ignore_access = elgg_get_ignore_access();
 
-	require "{$CONFIG->pluginspath}elgg_social_login/settings.php";
+	require "{$CONFIG->pluginspath}social_connect/settings.php";
 
-	$provider_name = $HA_SOCIAL_LOGIN_PROVIDERS_CONFIG[$provider]['provider_name'];
+	$provider_name = $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider]['provider_name'];
 	$user_uid = $user_profile->identifier;
+
+	// the arguments for social connect events and hooks
+	$args = array(
+		'mode' => null,
+		'userid' => $user_uid,
+		'provider' => $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider],
+		'user' => null,
+		'profile'=>$user_profile,
+	);
 
 	// look for users that have already connected via this plugin
 	$options = array(
 		'type' => 'user',
-		'plugin_id' => 'elgg_social_login',
+		'plugin_id' => 'social_connect',
 		'plugin_user_setting_name_value_pairs' => array(
 			"$provider/uid" => $user_uid
 		),
@@ -28,81 +38,82 @@ function elgg_social_handle_authentication($user_profile, $provider) {
 	);
 	$users = elgg_get_entities_from_plugin_user_settings($options);
 
-	if ( !$users ) {
-		// user has not connected with plugin before
-
-		// check whether the user already exists with the email provided
-		$useremail = $user_profile->email;
-		if ( !$useremail ) {
-			register_error(sprintf(elgg_echo('jasl:connect:bad'), $provider_name));
+	if ( !$users ) { // user has not connected with plugin before
+		$args['mode'] = 'connect';
+        elgg_set_ignore_access(true);
+        $proceed = elgg_trigger_plugin_hook('social_connect', 'user', $args, true);
+        elgg_set_ignore_access($ignore_access);
+		if ( $proceed === false ) {  // hook prevented social connection
 			return;
-		}
-
-		$users = get_user_by_email($useremail);
-		if ( $users ) {
-			// if so, then connect the existing user to the social profile
-			$mode = 'email';
-
-			elgg_social_connect_user($user_uid, $users[0], $user_profile, $provider);
-			// notice
-			system_message(sprintf(elgg_echo('jasl:connect:ok'), $provider_name));
-
-			// allow other plugins to interact with this (for example to take more data out of profile and register it as metadata in Elgg)
-			elgg_trigger_event('social_connect', 'user', array('userid'=>$user_uid, 'provider'=>$provider, 'user'=>$user, 'profile'=>$user_profile));
-		} else {
-			// if not, register a new user with the data from the social profile
-			$mode = 'profile';
-
-			$userlogin = str_replace(' ', '', $user_profile->displayName);
-
-			if ( !$userlogin ) {
-				$userlogin = $provider . '_user_' . rand(1000, 9999);
-			}
-
-			while ( get_user_by_username($userlogin) ) {
-				$userlogin = str_replace(' ', '', $user_profile->displayName) . '_' . rand(1000, 9999);
-			}
-
-			$password = generate_random_cleartext_password();
-
-			$username = $user_profile->displayName;
-
-			$user = new ElggUser();
-			$user->username = $userlogin;
-			$user->name = $username;
-			$user->email = $useremail;
-			$user->access_id = ACCESS_PUBLIC;
-			$user->salt = generate_random_cleartext_password();
-			$user->password = generate_user_password($user, $password);
-			$user->owner_guid = 0;
-			$user->container_guid = 0;
-
-			if ( !$user->save() ) {
-				register_error(sprintf(elgg_echo('jasl:register:bad'), $provider_name));
+		} else if ( $proceed === 'email' || $proceed === 'emailOnly' ) { // hook wants to try and connect via email address
+			// check whether the user already exists with the email provided
+			$useremail = $user_profile->email;
+			if ( $useremail && ($users = get_user_by_email($useremail)) ) {
+				social_connect_user($user_uid, $users[0], $user_profile, $provider);
+				system_message(sprintf(elgg_echo('social_connect:connect:ok'), $provider_name));
+				$args['mode'] = 'email';
+				$args['user'] = $users[0];
+                elgg_set_ignore_access(true);
+				elgg_trigger_event('social_connect', 'user', $args);
+                elgg_set_ignore_access($ignore_access);
 				return;
 			}
-
-			elgg_social_connect_user($user_uid, $user, $user_profile, $provider);
-			// notice
-			system_message(sprintf(elgg_echo('jasl:register:ok'), $provider_name));
+			if ( $proceed === 'emailOnly' ) { // hook wants only email address connection or failure
+				register_error(sprintf(elgg_echo('social_connect:connect:emailnotfound'), $proceed));
+				return;
+			}
 		}
+		// email connection not required or failed, so register a new user
+		$userlogin = str_replace(' ', '', $user_profile->displayName);
+		if ( !$userlogin ) {
+			$userlogin = $provider . '_user_' . rand(1000, 9999);
+		}
+		$org_userlogin = $userlogin;
+		while ( get_user_by_username($userlogin) ) {
+			$userlogin = $org_userlogin . '_' . rand(1000, 9999);
+		}
+		unset($org_userlogin);
 
-		// allow other plugins to interact with this (for example to take more data out of profile and register it as metadata in Elgg)
-		elgg_trigger_event('social_connect', 'user', array('mode' => $mode, 'userid'=>$user_uid, 'provider'=>$HA_SOCIAL_LOGIN_PROVIDERS_CONFIG[$provider], 'user'=>$user, 'profile'=>$user_profile));
+		$password = generate_random_cleartext_password();
+		$username = $user_profile->displayName;
 
-	} elseif ( count($users) == 1 ) {
-		// login user
-		login($users[0]);
-		// notice
-		system_message(sprintf(elgg_echo('jasl:login:ok'), $provider_name));
+		$user = new ElggUser();
+		$user->username = $userlogin;
+		$user->name = $username;
+		$user->email = $user_profile->email;
+		$user->access_id = ACCESS_PUBLIC;
+		$user->salt = generate_random_cleartext_password();
+		$user->password = generate_user_password($user, $password);
+		$user->owner_guid = 0;
+		$user->container_guid = 0;
+		if ( !$user->save() ) {
+			register_error(sprintf(elgg_echo('social_connect:register:bad'), $provider_name));
+			return;
+		}
+		system_message(sprintf(elgg_echo('social_connect:register:ok'), $provider_name));
+		social_connect_user($user_uid, $user, $user_profile, $provider);
+        $args['mode'] = 'register';
+        $args['user'] = $user;
+        elgg_set_ignore_access(true);
+        elgg_trigger_event('social_connect', 'user', $args);
+        elgg_set_ignore_access($ignore_access);
+	} elseif ( count($users) == 1 ) { // one user has already been registered on Elgg with this provider
+		$args['mode'] = 'login';
+		$args['user'] = $users[0];
+        elgg_set_ignore_access(true);
+		if ( elgg_trigger_plugin_hook('social_connect', 'user', $args, true) ) {
+			login($users[0]);
+			system_message(sprintf(elgg_echo('social_connect:login:ok'), $provider_name));
+		}
+        elgg_set_ignore_access($ignore_access);
 	} else {
-		throw new Exception(sprintf(elgg_echo('jasl:login:bad'), $provider_name));
+		throw new Exception(sprintf(elgg_echo('social_connect:login:bad'), $provider_name));
 	} 
 }
 
-function elgg_social_connect_user($user_uid, $user, $user_profile, $provider) {
+function social_connect_user($user_uid, $user, $user_profile, $provider) {
 	// register user && provider
-	elgg_set_plugin_user_setting("$provider/uid", $user_uid, $user->guid, 'elgg_social_login');
+	elgg_set_plugin_user_setting("$provider/uid", $user_uid, $user->guid, 'social_connect');
 
 	login($user);
 
