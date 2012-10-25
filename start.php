@@ -1,11 +1,19 @@
 <?php
 elgg_register_event_handler('init', 'system', 'social_connect_init');
 
-function social_connect_init() {
+function social_connect_init($event, $object_type, $object) {
 	elgg_extend_view('forms/login'   , 'social_connect/connect');
 	elgg_extend_view('forms/register', 'social_connect/connect', '499');
 	elgg_extend_view('css/admin'     , 'social_connect/admincss');
 	elgg_extend_view('css/elgg'      , 'social_connect/css');
+    elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'social_connect_public_pages');
+}
+
+function social_connect_public_pages($hook, $type, $return_value, $params) {
+    return array(
+        'mod/social_connect/authenticate\\.php',
+        'mod/social_connect/index\\.php',
+    );
 }
 
 function social_connect_handle_authentication($user_profile, $provider) {
