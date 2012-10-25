@@ -23,7 +23,7 @@ function social_connect_handle_authentication($user_profile, $provider) {
 		'userid' => $user_uid,
 		'provider' => $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider],
 		'user' => null,
-		'profile'=>$user_profile,
+		'profile' => $user_profile,
 	);
 
 	// look for users that have already connected via this plugin
