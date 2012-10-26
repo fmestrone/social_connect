@@ -9,6 +9,8 @@ restore_error_handler();
 restore_exception_handler();
 
 global $CONFIG;
+global $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG;
+
 $assets_base_url  = "{$CONFIG->url}mod/social_connect/";
 $assets_base_path = "{$CONFIG->pluginspath}social_connect/";
 $provider = @trim(strip_tags($_GET['provider']));
@@ -99,6 +101,13 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 	if ( $provider == 'Facebook' ) {
 		$providerConfig['display'] = 'popup';
 	}
+
+    // if openid
+    if ( $provider == 'OpenID' ) {
+        $provider_params = array( "openid_identifier" => "https://openid.stackexchange.com/");
+    } else {
+        $provider_params = null;
+    }
 
 	$config['providers'] = array($provider => $providerConfig);
 

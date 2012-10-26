@@ -2,17 +2,21 @@
 elgg_register_event_handler('init', 'system', 'social_connect_init');
 
 function social_connect_init() {
-	elgg_extend_view('forms/login'   , 'social_connect/connect');
-	elgg_extend_view('forms/register', 'social_connect/connect', '499');
+    // add connect form after login form
+	elgg_extend_view('forms/login'   , 'social_connect/connect', 501);
+    // add connect form before register form
+	elgg_extend_view('forms/register', 'social_connect/connect', 499);
+    // extend admin style sheet
 	elgg_extend_view('css/admin'     , 'social_connect/admincss');
+    // extend main style sheet
 	elgg_extend_view('css/elgg'      , 'social_connect/css');
 }
 
 function social_connect_handle_authentication($user_profile, $provider) {
 	global $CONFIG;
-    $ignore_access = elgg_get_ignore_access();
+    global $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG;
 
-	require "{$CONFIG->pluginspath}social_connect/settings.php";
+    $ignore_access = elgg_get_ignore_access();
 
 	$provider_name = $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider]['provider_name'];
 	$user_uid = $user_profile->identifier;
@@ -41,7 +45,7 @@ function social_connect_handle_authentication($user_profile, $provider) {
 	if ( !$users ) { // user has not connected with plugin before
 		$args['mode'] = 'connect';
         elgg_set_ignore_access(true);
-        $proceed = elgg_trigger_plugin_hook('social_connect', 'user', $args, true);
+        $proceed = elgg_trigger_plugin_hook('social_connect', 'user', $args, 'email');
         elgg_set_ignore_access($ignore_access);
 		if ( $proceed === false ) {  // hook prevented social connection
 			return;
@@ -101,7 +105,7 @@ function social_connect_handle_authentication($user_profile, $provider) {
 		$args['mode'] = 'login';
 		$args['user'] = $users[0];
         elgg_set_ignore_access(true);
-		if ( elgg_trigger_plugin_hook('social_connect', 'user', $args, true) ) {
+		if ( elgg_trigger_plugin_hook('social_connect', 'user', $args, true) ) {   // if not, hook prevented social connection
 			login($users[0]);
 			system_message(sprintf(elgg_echo('social_connect:login:ok'), $provider_name));
 		}

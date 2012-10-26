@@ -27,7 +27,6 @@ if ( !empty($connect_with) ) {
 	<div class="social_connect_site_connect">
 		<div><b><?php echo elgg_echo('social_connect:connect:connect_with'); ?></b></div>
 	<?php echo $connect_with ?>
-	<input id="ha_popup_base_url" type="hidden" value="<?php echo "{$vars['url']}mod/social_connect/"; ?>authenticate.php?" />
 	<p>
 	<?php
 	// link attribution && privacy page 
@@ -40,16 +39,11 @@ if ( !empty($connect_with) ) {
 	</p>
 	</div>
 	<script>
-		$(function(){
-			$(".ha_connect_with_provider").click(function(){
-				popupurl = $("#ha_popup_base_url").val();
+		$(function() {
+			$(".ha_connect_with_provider").click(function() {
+				popupurl = "<?php echo $vars['url']; ?>mod/social_connect/authenticate.php?";
 				provider = $(this).data("provider");
-
-				window.open(
-					popupurl+"provider="+provider,
-					"hybridauth_social_sing_on", 
-					"location=1,status=0,scrollbars=0,width=800,height=570"
-				); 
+				window.open(popupurl + "provider=" + provider, "social_connect_sign_on", "location=1,status=0,scrollbars=0,width=800,height=600");
 			});
 		});
 	</script> 
