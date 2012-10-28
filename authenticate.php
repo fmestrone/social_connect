@@ -70,7 +70,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 
 	$config = array();
 
-	$config['base_url'] = $assets_base_url;
+	$config['base_url'] = "{$assets_base_url}index.php";
 
 	if ( elgg_get_plugin_setting('ha_settings_test_mode', 'social_connect') ) {
 		$config['debug_mode'] = true;

@@ -1,7 +1,7 @@
 <?php
 $localized = array(
 	'social_connect:settings:warning' => 'Warning:',
-	'social_connect:settings:failed_requirements' => 'Unfortunately Your server failed the requirements check for this plugin and most likely it won\'t work correctly!',
+	'social_connect:settings:failed_requirements' => 'Unfortunately your server failed the requirements check for this plugin and most likely it won\'t work correctly!',
 	'social_connect:settings:run_tests' => 'Run the plugin requirements test',
 	'social_connect:settings:user_guide' => 'Read the plugin user guide',
 	'social_connect:settings:general' => 'General Settings',
@@ -26,7 +26,7 @@ $localized = array(
 	'social_connect:settings:howto5_1_provider' => 'Put your website domain in the <b>%s</b> field. This should match the current hostname <em style="color:#CB4B16;">%s</em>.',
 	'social_connect:settings:howto6_provider' => 'Set the <b>Application Type</b> to <em style="color:#CB4B16;">Web Application</em>.',
 	'social_connect:settings:howto7_provider' => 'Set the <b>Application Type</b> to <em style="color:#CB4B16;">Browser</em>.',
-	'social_connect:settings:howto9_provider' => 'Once you have registered, copy and past the created application credentials into this setup page.',
+	'social_connect:settings:howto9_provider' => 'Once you have registered, copy and paste the credentials of the newly created application into this setup page.',
 	'social_connect:settings:howto4_provider' => 'Provide this URL as the Callback URL for your application:',
 	'social_connect:settings:howto4_provider' => 'Provide this URL as the Callback URL for your application:',
 	'social_connect:settings:howto4_provider' => 'Provide this URL as the Callback URL for your application:',
@@ -38,7 +38,7 @@ $localized = array(
 	'social_connect:connect:connect_with' => 'Or connect with ',
 	'social_connect:connect:privacy' => 'Privacy',
 	'social_connect:register:bad' => 'Could not register with %s',
-	'social_connect:register:ok' => 'A new user account has been created from your %s account.',
+	'social_connect:register:ok' => 'A new Elgg user account has been created from your %s account.',
 	'social_connect:connect:ok' => 'Your Elgg user account has been connected to your %s account.',
 	'social_connect:connect:emailnotfound' => 'The email address provided by %s is not registered with Elgg yet',
 	'social_connect:login:ok' => 'You have signed in with %s',

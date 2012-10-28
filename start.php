@@ -10,6 +10,16 @@ function social_connect_init() {
 	elgg_extend_view('css/admin'     , 'social_connect/admincss');
     // extend main style sheet
 	elgg_extend_view('css/elgg'      , 'social_connect/css');
+    // handle 'public_pages','wall_garden' hook to allow plugin to work in walled garden too
+    elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'social_connect_public_pages');
+}
+
+function social_connect_public_pages($hook, $type, $return_value, $params) {
+    // list the public pages that should be available from the walled garden
+    return array(
+        'mod/social_connect/authenticate\\.php',
+        'mod/social_connect/index\\.php',
+    );
 }
 
 function social_connect_handle_authentication($user_profile, $provider) {
@@ -27,7 +37,7 @@ function social_connect_handle_authentication($user_profile, $provider) {
 		'userid' => $user_uid,
 		'provider' => $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider],
 		'user' => null,
-		'profile'=>$user_profile,
+		'profile' => $user_profile,
 	);
 
 	// look for users that have already connected via this plugin
@@ -45,7 +55,7 @@ function social_connect_handle_authentication($user_profile, $provider) {
 	if ( !$users ) { // user has not connected with plugin before
 		$args['mode'] = 'connect';
         elgg_set_ignore_access(true);
-        $proceed = elgg_trigger_plugin_hook('social_connect', 'user', $args, 'email');
+        $proceed = elgg_trigger_plugin_hook('social_connect', 'user', $args, true);
         elgg_set_ignore_access($ignore_access);
 		if ( $proceed === false ) {  // hook prevented social connection
 			return;
