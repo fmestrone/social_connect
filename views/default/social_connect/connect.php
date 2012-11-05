@@ -33,7 +33,7 @@ if ( !empty($connect_with) ) {
 	if ( elgg_get_plugin_setting('ha_settings_privacy_page', 'social_connect' ) ) {
 		?>
 			<a href="<?php echo elgg_get_plugin_setting('ha_settings_privacy_page','social_connect') ?>" target="_blank"><?php echo elgg_echo('social_connect:connect:privacy'); ?></a>
-		<?
+		<?php
 	}
 	?>
 	</p>
@@ -47,6 +47,6 @@ if ( !empty($connect_with) ) {
 			});
 		});
 	</script> 
-	<?
+	<?php
 }
 ?>
