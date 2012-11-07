@@ -153,9 +153,11 @@ function social_connect_user($user_uid, $user, $user_profile, $provider) {
 			);
 
 			$filehandler->setFilename("profile/{$user->guid}{$size}.jpg");
-			$filehandler->open('write');
-			$filehandler->write($image);
-			$filehandler->close();
+            if ( !$filehandler->exists() ) {
+                $filehandler->open('write');
+                $filehandler->write($image);
+                $filehandler->close();
+            }
 		}
 
 		$user->icontime = time(); 
