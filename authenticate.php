@@ -1,5 +1,6 @@
 <?php
 define('SOCIAL_CONNECT_DEFAULT_LOG_FILE', 'log/debug.log');
+define('SOCIAL_CONNECT_DEFAULT_PROCEED', true);
 
 /**
  * Set up initial variables
@@ -123,7 +124,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 
     // if openid
     if ( $provider == 'OpenID' ) {
-        $provider_params = array( "openid_identifier" => "https://openid.stackexchange.com/");
+        $provider_params = array('openid_identifier' => elgg_get_plugin_setting('ha_settings_OpenID_url', 'social_connect'));
     } else {
         $provider_params = null;
     }
@@ -134,7 +135,7 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 	try {
 		$hybridauth = new Hybrid_Auth($config);
 
-		$adapter = $hybridauth->authenticate($provider);
+		$adapter = $hybridauth->authenticate($provider, $provider_params);
 
 		$user_profile = $adapter->getUserProfile();
 
