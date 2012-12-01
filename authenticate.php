@@ -1,4 +1,6 @@
 <?php
+define('SOCIAL_CONNECT_DEFAULT_LOG_FILE', 'log/debug.log');
+
 /**
  * Set up initial variables
  */
@@ -73,11 +75,28 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 	$config['base_url'] = "{$assets_base_url}index.php";
 
 	if ( elgg_get_plugin_setting('ha_settings_test_mode', 'social_connect') ) {
-		$config['debug_mode'] = true;
-		$config['debug_file'] = $assets_base_path . 'log/debug.log';
+        $debug_file = trim(elgg_get_plugin_setting('ha_settings_test_logfile', 'social_connect'));
+        if ( !$debug_file ) {
+            $debug_file = SOCIAL_CONNECT_DEFAULT_LOG_FILE;
+        }
+        if ( substr($debug_file, 1) != '/' ) {
+            $debug_file = "{$assets_base_path}{$debug_file}";
+        }
+        if ( !file_exists($debug_file) ) {
+            mkdir(dirname($debug_file), 0777, true);
+            $fh = fopen($debug_file, 'w');
+            if ( !$fh ) {
+                throw new Exception('Cannot create log file for debug mode');
+            }
+            fclose($fh);
+        }
+        if ( file_exists($debug_file) ) { // if file existed already, or was successfully created
+            $config['debug_mode'] = true;
+            $config['debug_file'] = $debug_file;
+            $config['debug_level'] = elgg_get_plugin_setting('ha_settings_test_loglevel', 'social_connect');
+        }
 	}
-	
-	
+
 	$providerConfig = array();
 	
 	$providerConfig['enabled'] = true;

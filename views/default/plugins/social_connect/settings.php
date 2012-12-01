@@ -7,11 +7,13 @@ $plugin_base_url     = "{$CONFIG->url}mod/social_connect/";
 $hybridauth_base_url = "{$CONFIG->url}mod/social_connect/vendors/hybridauth/";
 $assets_base_url     = "{$vars['url']}mod/social_connect/graphics/";
 
+$debug_mode_on = $vars['entity']->ha_settings_test_mode;
+
 echo '<div id="social_connect_site_settings">';
 
 if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_exists('curl_version') || class_exists('OAuthException') || extension_loaded('oauth') ) {
 ?>
-<p style="font-size: 14px;margin-left:10px;"> 
+<p style="font-size: 14px;margin-left:10px;">
 	<br />
 	<b style='color:red;'>
 	<?php elgg_echo('social_connect:settings:warning') ?>
@@ -22,48 +24,91 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 </p>
 <?php
 }
-?> 
-	<p style="font-size: 14px;margin-left:10px;"> 
+// NB slideToggle does not work on table rows
+?>
+    <script type="text/javascript">
+        function toggleDebugOptions() {
+            $('#trDebugOptions').toggle();
+        }
+    </script>
+	<p style="font-size: 14px;margin-left:10px;">
 		<br /> 
 		<div align="center">
 		<b><a href="<?php echo $plugin_base_url ?>diagnostics.php?url=http://www.example.com" target="_blank" style="border: 1px solid #CCCCCC;border-radius: 5px;padding: 7px;text-decoration: none;"> <?php echo elgg_echo('social_connect:settings:run_tests') ?> </a></b>
 		&nbsp;
-		<b><a href="<?php echo $plugin_base_url ?>help/index.html#settings" target="_blank"  style="border: 1px solid #CCCCCC;border-radius: 5px;padding: 7px;text-decoration: none;"> <?php echo elgg_echo('social_connect:settings:user_guide') ?> </a></b>
+		<b><a href="https://moodsdesign.atlassian.net/wiki/display/ELGGSOCIAL" target="_blank"  style="border: 1px solid #CCCCCC;border-radius: 5px;padding: 7px;text-decoration: none;"> <?php echo elgg_echo('social_connect:settings:user_guide') ?> </a></b>
 		</div>
 		<br /> 
 	</p>
- 
+
 	<br />
 	<h2 style="border-bottom: 1px solid #CCCCCC;margin:10px;"><?php echo elgg_echo('social_connect:settings:general') ?></h2>
 
 		<div style="padding: 5px;margin: 5px;background: none repeat scroll 0 0 #F5F5F5;border-radius:3px;">
-			<table>
-			<tr>
-			<td>
-				<b><?php echo elgg_echo('social_connect:settings:debug_mode') ?></b>
-				<select style="height:22px;margin: 3px;" name="params[ha_settings_test_mode]">
-					<option value="1" <?php if(   $vars['entity']->ha_settings_test_mode ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:yes') ?></option>
-					<option value="0" <?php if( ! $vars['entity']->ha_settings_test_mode ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:no') ?></option>
-				</select> 
-			</td>
-			<td> 
-				&nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:recommend_debug') ?>
-			</td>
-			</tr>
+			<table width="100%">
+                <thead>
+                <tr>
+                    <td width="25%">
+                        <b><?php echo elgg_echo('social_connect:settings:debug_mode') ?></b>
+                    </td>
+                    <td width="38%">
+                        <select style="height:22px;margin: 3px;" name="params[ha_settings_test_mode]" onchange="toggleDebugOptions();">
+                            <option value="1" <?php if( $debug_mode_on ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:yes') ?></option>
+                            <option value="0" <?php if( !$debug_mode_on ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:no') ?></option>
+                        </select>
+                    </td>
+                    <td width="37%">
+                        &nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:debug_mode_explain') ?>
+                    </td>
+                </tr>
+                </thead>
+                <tbody id="trDebugOptions" style="display: <?php echo $debug_mode_on ? 'table-row-group' : 'none'; ?>">
+                <tr>
+                    <td width="25%">
+                        <b><?php echo elgg_echo('social_connect:settings:debug_level') ?></b>
+                    </td>
+                    <td width="38%">
+                        <select style="height:22px;margin: 3px;" name="params[ha_settings_test_loglevel]">
+                            <option value="3" <?php if ( $vars['entity']->ha_settings_test_loglevel == '3' ) echo "selected"; ?>>DEBUG</option>
+                            <option value="2" <?php if ( $vars['entity']->ha_settings_test_loglevel == '2' ) echo "selected"; ?>>INFO</option>
+                            <option value="1" <?php if ( $vars['entity']->ha_settings_test_loglevel == '1' ) echo "selected"; ?>>ERROR</option>
+                            <option value="0" <?php if ( $vars['entity']->ha_settings_test_loglevel == '0' ) echo "selected"; ?>>OFF</option>
+                        </select>
+                    </td>
+                    <td width="37%">
+                        &nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b><?php echo elgg_echo('social_connect:settings:debug_file') ?></b>
+                    </td>
+                    <td>
+                        <input type="text" style="width: 250px;margin: 3px;"
+                               value="<?php echo $vars['entity']->ha_settings_test_logfile; ?>"
+                               name="params[ha_settings_test_logfile]">
+                    </td>
+                    <td>
+                        &nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:debug_file_explain') ?>
+                    </td>
+                </tr>
+                </tbody>
 			</table>
 		</div> 
  
 		<div style="padding: 5px;margin: 5px;background: none repeat scroll 0 0 #F5F5F5;border-radius:3px;">
-			<table>
+			<table width="100%">
 			<tr>
-			<td>
-				<b><?php echo elgg_echo('social_connect:settings:have_privacy') ?></b>
-				
+			<td width="25%">
+				<b><?php echo elgg_echo('social_connect:settings:privacy') ?></b>
 			</td>
-			<td> 
-				<input type="text" style="width: 350px;margin: 3px;" 
+			<td width="38%">
+				<input type="text" style="width: 250px;margin: 3px;"
 					value="<?php echo $vars['entity']->ha_settings_privacy_page; ?>"
-					name="params[ha_settings_privacy_page]"> <?php echo elgg_echo('social_connect:settings:privacy_blank') ?>
+					name="params[ha_settings_privacy_page]">
+            </td>
+            <td width="37%">
+                &nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:privacy_explain') ?>
 			</td>
 			</tr>
 			</table>
