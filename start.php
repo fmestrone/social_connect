@@ -15,11 +15,11 @@ function social_connect_init() {
 }
 
 function social_connect_public_pages($hook, $type, $return_value, $params) {
-    // list the public pages that should be available from the walled garden
-    return array(
-        'mod/social_connect/authenticate\\.php',
-        'mod/social_connect/index\\.php',
-    );
+    // add to the current list of public pages that should be available from the walled garden
+    $return_value[] = 'mod/social_connect/authenticate\\.php';
+    $return_value[] = 'mod/social_connect/index\\.php';
+    // return the modified value
+    return $return_value;
 }
 
 function social_connect_handle_authentication($user_profile, $provider) {
