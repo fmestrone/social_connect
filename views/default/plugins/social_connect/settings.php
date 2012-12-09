@@ -37,17 +37,16 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 	<p style="font-size: 14px;margin-left:10px;">
 		<br /> 
 		<div align="center">
-		<b><a href="<?php echo $plugin_base_url ?>diagnostics.php?url=http://www.example.com" target="_blank" style="border: 1px solid #CCCCCC;border-radius: 5px;padding: 7px;text-decoration: none;"> <?php echo elgg_echo('social_connect:settings:run_tests') ?> </a></b>
+		<b><a href="<?php echo $plugin_base_url ?>diagnostics.php?url=http://www.example.com" target="_blank" class="social_connect_link_button"> <?php echo elgg_echo('social_connect:settings:run_tests') ?> </a></b>
 		&nbsp;
-		<b><a href="https://moodsdesign.atlassian.net/wiki/display/ELGGSOCIAL" target="_blank"  style="border: 1px solid #CCCCCC;border-radius: 5px;padding: 7px;text-decoration: none;"> <?php echo elgg_echo('social_connect:settings:user_guide') ?> </a></b>
+		<b><a href="https://moodsdesign.atlassian.net/wiki/display/ELGGSOCIAL" target="_blank" class="social_connect_link_button"> <?php echo elgg_echo('social_connect:settings:user_guide') ?> </a></b>
 		</div>
 		<br /> 
 	</p>
 
 	<br />
-	<h2 style="border-bottom: 1px solid #CCCCCC;margin:10px;"><?php echo elgg_echo('social_connect:settings:general') ?></h2>
-
-		<div style="padding: 5px;margin: 5px;background: none repeat scroll 0 0 #F5F5F5;border-radius:3px;">
+	<h2 class="social_connect_settings_header"><?php echo elgg_echo('social_connect:settings:general') ?></h2>
+		<div class="social_connect_settings_box">
 			<table width="100%">
                 <thead>
                 <tr>
@@ -99,7 +98,7 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 			</table>
 		</div> 
  
-		<div style="padding: 5px;margin: 5px;background: none repeat scroll 0 0 #F5F5F5;border-radius:3px;">
+		<div class="social_connect_settings_box">
 			<table width="100%">
 			<tr>
 			<td width="25%">
@@ -117,7 +116,7 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 			</table>
 		</div>
 
-<div style="padding: 5px;margin: 5px;background: none repeat scroll 0 0 #F5F5F5;border-radius:3px;">
+<div class="social_connect_settings_box">
     <table width="100%">
         <tr>
             <td width="25%">
@@ -125,10 +124,10 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
             </td>
             <td width="38%">
                 <select style="height:22px;margin: 3px;" name="params[ha_settings_hook1_default]">
-                    <option value="true" <?php if( $vars['entity']->ha_settings_hook1_default == 'true' ) echo "selected"; ?>>true</option>
-                    <option value="false" <?php if( $vars['entity']->ha_settings_hook1_default == 'false' ) echo "selected"; ?>>false</option>
-                    <option value="email" <?php if( $vars['entity']->ha_settings_hook1_default == 'email' ) echo "selected"; ?>>email</option>
-                    <option value="emailOnly" <?php if( $vars['entity']->ha_settings_hook1_default == 'emailOnly' ) echo "selected"; ?>>emailOnly</option>
+                    <option value="true" <?php if( $vars['entity']->ha_settings_hook1_default == 'true' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_true'); ?></option>
+                    <option value="false" <?php if( $vars['entity']->ha_settings_hook1_default == 'false' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_false'); ?></option>
+                    <option value="email" <?php if( $vars['entity']->ha_settings_hook1_default == 'email' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_email'); ?></option>
+                    <option value="emailOnly" <?php if( $vars['entity']->ha_settings_hook1_default == 'emailOnly' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_emailonly'); ?></option>
                 </select>
             </td>
             <td width="37%">
@@ -139,13 +138,13 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 </div>
 
 <br />
-	<h2 style="border-bottom: 1px solid #CCCCCC;margin:10px;"><?php echo elgg_echo('social_connect:settings:provider_setup') ?></h2>
+	<h2 class="social_connect_settings_header"><?php echo elgg_echo('social_connect:settings:provider_setup') ?></h2>
 	<p style="margin:10px;">
-		<?php echo elgg_echo('social_connect:settings:except_openid') ?>
+		<?php echo elgg_echo('social_connect:settings:provider_settings_help') ?>
 	</p>
 	<ul style="list-style:circle inside;margin-left:30px;">
-		<li><?php echo elgg_echo('social_connect:settings:follow_help') ?></li>
-		<li><?php echo elgg_echo('social_connect:settings:status_no') ?></li>
+		<li><?php echo elgg_echo('social_connect:settings:provider_enabled_help') ?></li>
+		<li><?php echo elgg_echo('social_connect:settings:provider_disabled_help') ?></li>
 	</ul>
 	<br />
 <?php   
@@ -168,70 +167,94 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 		$setupsteps = 0;
 	?> 
 	<div> 
-		<div style="border-radius:3px; border: 1px solid #999999;">
-			<div style="padding: 5px;margin: 5px;background: none repeat scroll 0 0 #F5F5F5;border-radius:3px;">
+		<div class="social_connect_provider_settings">
+			<div class="social_connect_settings_box">
 				<h2><img alt="<?php echo $provider_name ?>" title="<?php echo $provider_name ?>" src="<?php echo $assets_base_url . "16x16/" . strtolower( $provider_id ) . '.png' ?>" /> <?php echo $provider_name ?></h2>
                 <br>
-				<ul>
-                    <?php $entitykey = 'ha_settings_' . $provider_id . '_enabled'; ?>
-					<li><b><?php echo elgg_echo('social_connect:settings:enable_provider', array($provider_name)); ?></b>
-						<select name="params[<?php echo $entitykey ?>]" style="height:22px;margin: 3px;" onchange="toggleProviderOptions('<?php echo $provider_id ?>');">
-							<option value="1" <?php if( $vars['entity']->$entitykey == 1 ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:yes') ?></option>
-							<option value="0" <?php if( $vars['entity']->$entitykey == 0 ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:no') ?></option>
-						</select>
-					</li>
-                </ul>
+                <?php $entitykey = 'ha_settings_' . $provider_id . '_enabled'; ?>
+				<table width="100%">
+                    <tr>
+                        <td width="40%">
+                            <b><?php echo elgg_echo('social_connect:settings:enable_provider', array($provider_name)); ?></b>
+                        </td>
+                        <td width="60%">
+                            <select name="params[<?php echo $entitykey ?>]" style="height:22px;margin: 3px;" onchange="toggleProviderOptions('<?php echo $provider_id ?>');">
+                                <option value="1" <?php if( $vars['entity']->$entitykey == 1 ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:yes') ?></option>
+                                <option value="0" <?php if( $vars['entity']->$entitykey == 0 ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:no') ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <div id="social_connect_div_<?php echo $provider_id ?>" style="padding: 5px;margin: 5px;background: none repeat scroll 0 0 #F5F5F5;border-radius:3px;display: <?php echo $vars['entity']->$entitykey == 1 ? 'block' : 'none'; ?>">
-                <ul>
-                    <?php $entitykey = 'ha_settings_' . $provider_id . '_hook1_default'; ?>
-                    <li><b><?php echo elgg_echo('social_connect:settings:hook_default', array($provider_name)); ?></b>
-                        <select name="params[<?php echo $entitykey ?>]" style="height:22px;margin: 3px;" >
-                            <option value="global" <?php if( $vars['entity']->$entitykey == 'global' ) echo "selected"; ?>>global</option>
-                            <option value="true" <?php if( $vars['entity']->$entitykey == 'true' ) echo "selected"; ?>>true</option>
-                            <option value="false" <?php if( $vars['entity']->$entitykey == 'false' ) echo "selected"; ?>>false</option>
-                            <option value="email" <?php if( $vars['entity']->$entitykey == 'email' ) echo "selected"; ?>>email</option>
-                            <option value="emailOnly" <?php if( $vars['entity']->$entitykey == 'emailOnly' ) echo "selected"; ?>>emailOnly</option>
-                        </select>
-                    </li>
+            <div id="social_connect_div_<?php echo $provider_id ?>" class="social_connect_settings_box" style="display: <?php echo $vars['entity']->$entitykey == 1 ? 'block' : 'none'; ?>">
+                <?php $entitykey = 'ha_settings_' . $provider_id . '_hook1_default'; ?>
+                <table width="100%">
+                    <tr>
+                        <td width="40%">
+                            <b><?php echo elgg_echo('social_connect:settings:hook_default', array($provider_name)); ?></b>
+                        </td>
+                        <td width="60%">
+                            <select name="params[<?php echo $entitykey ?>]" style="height:22px;margin: 3px;" >
+                                <option value="global" <?php if( $vars['entity']->$entitykey == 'global' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_global'); ?></option>
+                                <option value="true" <?php if( $vars['entity']->$entitykey == 'true' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_true'); ?></option>
+                                <option value="false" <?php if( $vars['entity']->$entitykey == 'false' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_false'); ?></option>
+                                <option value="email" <?php if( $vars['entity']->$entitykey == 'email' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_email'); ?></option>
+                                <option value="emailOnly" <?php if( $vars['entity']->$entitykey == 'emailOnly' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_emailonly'); ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                <?php foreach ( $item['extras'] as $extra_key => $extra_value ) { ?>
+                <?php $entitykey = "ha_settings_{$provider_id}_{$extra_key}"; ?>
+                <tr>
+                    <td width="40%">
+                        <b><?php echo elgg_echo("social_connect:settings:{$provider_id}_{$extra_key}"); ?></b>
+                    </td>
+                    <td width="60%">
+                        <?php
+                        switch ( $extra_value ) {
+                            case 'text':
+                                ?>
+                                <input type="text" style="width: 350px;margin: 3px;"
+                                       value="<?php echo $vars['entity']->$entitykey; ?>"
+                                       name="params[<?php echo $entitykey ?>]" ></li>
+                                <?php break; ?>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <?php } ?>
 
-                    <?php foreach ( $item['extras'] as $extra_key => $extra_value ) { ?>
-                        <?php $entitykey = "ha_settings_{$provider_id}_{$extra_key}"; ?>
-                        <li><b><?php echo elgg_echo("social_connect:settings:{$provider_id}_{$extra_key}"); ?></b>
-                            <?php
-                            switch ( $extra_value ) {
-                                case 'text':
-                            ?>
-                            <input type="text" style="width: 350px;margin: 3px;"
-                                   value="<?php echo $vars['entity']->$entitykey; ?>"
-                                   name="params[<?php echo $entitykey ?>]" ></li>
-                            <?php break; ?>
-                            <?php } ?>
-                        </li>
-                    <?php } ?>
-
-                    <?php if ( $provider_new_app_link ){ ?>
-						<?php if ( $require_client_id ){ // key or id ? ?>
+                <?php if ( $provider_new_app_link ) { ?>
+                <tr>
+                    <td width="40%">
+                    <?php if ( $require_client_id ) { // key or id ? ?>
                         <?php $entitykey = 'ha_settings_' . $provider_id . '_app_id'; ?>
-					<li><b><?php echo elgg_echo('social_connect:settings:appid') ?></b>
-							<input type="text" style="width: 350px;margin: 3px;"
-							value="<?php echo $vars['entity']->$entitykey; ?>"
-							name="params[<?php echo $entitykey ?>]" ></li>
-						    <?php } else { ?>
+					    <b><?php echo elgg_echo('social_connect:settings:appid') ?></b>
+					<?php } else { ?>
                             <?php $entitykey = 'ha_settings_' . $provider_id . '_app_key'; ?>
-							<li><b><?php echo elgg_echo('social_connect:settings:appkey') ?></b>
-							<input type="text" style="width: 350px;margin: 3px;"
-								value="<?php echo $vars['entity']->$entitykey; ?>"
-								name="params[<?php echo $entitykey ?>]" ></li>
+							<b><?php echo elgg_echo('social_connect:settings:appkey') ?></b>
 						<?php }; ?>
+                    </td>
+                    <td width="60%">
+                    <input type="text" style="width: 350px;margin: 3px;"
+                           value="<?php echo $vars['entity']->$entitykey; ?>"
+                           name="params[<?php echo $entitykey ?>]" >
 
                         <?php $entitykey = 'ha_settings_' . $provider_id . '_app_secret'; ?>
-						<li><b><?php echo elgg_echo('social_connect:settings:appsecret') ?></b>
-						<input type="text" style="width: 350px;margin: 3px;"
-							value="<?php echo $vars['entity']->$entitykey; ?>"
-							name="params[<?php echo $entitykey ?>]" ></li>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="40%">
+						<b><?php echo elgg_echo('social_connect:settings:appsecret') ?></b>
+                    </td>
+                    <td width="60%">
+                        <input type="text" style="width: 350px;margin: 3px;"
+                               value="<?php echo $vars['entity']->$entitykey; ?>"
+                               name="params[<?php echo $entitykey ?>]" >
+                    </td>
+                </tr>
 					<?php } // if require registration ?>
-                </ul>
+
+                </table>
                 <div style="padding: 12px;margin: 5px;background: none repeat scroll 0 0 white;border-radius:3px;">
                     <p><b><?php echo elgg_echo('social_connect:settings:howto_provider', array($provider_name)) ?></b></p>
 

@@ -1,6 +1,6 @@
 
 /*
-* Social Connect CSS for Site connect
+* Social Connect CSS for Site Connect
 */
 .ha_connect_with_provider {
 }
