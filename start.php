@@ -12,6 +12,10 @@ function social_connect_init() {
 	elgg_extend_view('css/elgg'      , 'social_connect/css');
     // handle 'public_pages','wall_garden' hook to allow plugin to work in walled garden too
     elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'social_connect_public_pages');
+    // register this plugin for version updates
+    if ( elgg_is_active_plugin('version_check') ) {
+        version_check_register_plugin('social_connect');
+    }
 }
 
 function social_connect_public_pages($hook, $type, $return_value, $params) {
@@ -36,8 +40,10 @@ function social_connect_handle_authentication($user_profile, $provider) {
     if ( !$default_proceed || $default_proceed == 'global' ) {
         $default_proceed = elgg_get_plugin_setting('ha_settings_hook1_default', 'social_connect');
     }
-    if ( !$default_proceed || $default_proceed == 'true' ) {
+    if ( !$default_proceed ) {
         $default_proceed = SOCIAL_CONNECT_DEFAULT_PROCEED;
+    } else if ( $default_proceed == 'true' ) {
+        $default_proceed = true;
     } else if ( $default_proceed == 'false' ) {
         $default_proceed = false;
     }

@@ -7,6 +7,7 @@
 	<category>authentication</category>
     <category>tpintegrations</category>
     <copyright>2012, Moodsdesign Ltd</copyright>
+    <website>https://moodsdesign.atlassian.net/wiki/display/ELGGSOCIAL</website>
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_version</type>
@@ -16,4 +17,8 @@
 		<type>php_extension</type>
 		<name>curl</name>
 	</requires>
+	<suggests>
+		<type>plugin</type>
+		<name>version_check</name>
+	</suggests>
 </plugin_manifest>

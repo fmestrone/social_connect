@@ -1,5 +1,6 @@
 <?php
 $localized = array(
+	'social_connect:no_version_check' => 'The Version Check plugin is either not installed or not active. You will not be able to receive notifications of new Social Connect releases.',
 	'social_connect:settings:warning' => 'Warning:',
 	'social_connect:settings:failed_requirements' => 'Unfortunately your server failed the requirements test for this plugin. Most likely Social Connect will not work correctly!',
 	'social_connect:settings:run_tests' => 'Run the Requirements Test',

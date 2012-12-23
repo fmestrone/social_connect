@@ -1,4 +1,10 @@
 <?php
+
+// warn if Version Check is not present or not active
+if ( !elgg_is_active_plugin('version_check') ) {
+	register_error(elgg_echo('apiadmin:no_version_check'));
+}
+
 global $CONFIG;
 
 require "{$CONFIG->pluginspath}social_connect/settings.php";
