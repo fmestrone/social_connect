@@ -18,6 +18,7 @@ $localized = array(
     'social_connect:settings:global_hook_false' => 'Never',
     'social_connect:settings:global_hook_email' => 'Once per email',
     'social_connect:settings:global_hook_emailonly' => 'Only with email',
+	'social_connect:settings:notify_new_user' => 'Notify new users by email?',
 	'social_connect:settings:yes' => 'YES',
 	'social_connect:settings:no' => 'NO',
 	'social_connect:settings:privacy' => 'URL of Privacy Statement',
@@ -57,7 +58,10 @@ $localized = array(
 	'social_connect:login:bad' => 'Unable to sign you in with %s',
 	'social_connect:authenticate:loading' => 'Loading...',
 	'social_connect:authenticate:contacting' => 'Contacting <b>%s</b>, please wait...',
-    // Provider-specific options
+	// Email notifications
+	'email:social_connect:subject' => 'A new user has been created from your %s account',
+	'email:social_connect:body' => "Thanks for signing up!\n\nNew username: %s\n\nGenerated password: %s\n\nYou can login with these details and if you wish change the assigned password in your profile.",
+	// Provider-specific options
     'social_connect:settings:OpenID_url' => 'OpenID Provider URL',
 );
 add_translation('en', $localized);

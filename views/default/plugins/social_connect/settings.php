@@ -122,26 +122,45 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 			</table>
 		</div>
 
-<div class="social_connect_settings_box">
-    <table width="100%">
-        <tr>
-            <td width="25%">
-                <b><?php echo elgg_echo('social_connect:settings:global_hook_default') ?></b>
-            </td>
-            <td width="38%">
-                <select style="height:22px;margin: 3px;" name="params[ha_settings_hook1_default]">
-                    <option value="true" <?php if( $vars['entity']->ha_settings_hook1_default == 'true' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_true'); ?></option>
-                    <option value="false" <?php if( $vars['entity']->ha_settings_hook1_default == 'false' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_false'); ?></option>
-                    <option value="email" <?php if( $vars['entity']->ha_settings_hook1_default == 'email' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_email'); ?></option>
-                    <option value="emailOnly" <?php if( $vars['entity']->ha_settings_hook1_default == 'emailOnly' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_emailonly'); ?></option>
-                </select>
-            </td>
-            <td width="37%">
-                &nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:global_hook_explain') ?>
-            </td>
-        </tr>
-    </table>
-</div>
+	<div class="social_connect_settings_box">
+		<table width="100%">
+			<tr>
+				<td width="25%">
+					<b><?php echo elgg_echo('social_connect:settings:notify_new_user') ?></b>
+				</td>
+				<td width="38%">
+					<select style="height:22px;margin: 3px;" name="params[notify_new_user]">
+						<option value="1" <?php if ( $vars['entity']->notify_new_user ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:yes'); ?></option>
+						<option value="0" <?php if ( !$vars['entity']->notify_new_user ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:no'); ?></option>
+					</select>
+				</td>
+				<td width="37%">
+					&nbsp;&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="social_connect_settings_box">
+		<table width="100%">
+			<tr>
+				<td width="25%">
+					<b><?php echo elgg_echo('social_connect:settings:global_hook_default') ?></b>
+				</td>
+				<td width="38%">
+					<select style="height:22px;margin: 3px;" name="params[ha_settings_hook1_default]">
+						<option value="true" <?php if( $vars['entity']->ha_settings_hook1_default == 'true' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_true'); ?></option>
+						<option value="false" <?php if( $vars['entity']->ha_settings_hook1_default == 'false' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_false'); ?></option>
+						<option value="email" <?php if( $vars['entity']->ha_settings_hook1_default == 'email' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_email'); ?></option>
+						<option value="emailOnly" <?php if( $vars['entity']->ha_settings_hook1_default == 'emailOnly' ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:global_hook_emailonly'); ?></option>
+					</select>
+				</td>
+				<td width="37%">
+					&nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:global_hook_explain') ?>
+				</td>
+			</tr>
+		</table>
+	</div>
 
 <br />
 	<h2 class="social_connect_settings_header"><?php echo elgg_echo('social_connect:settings:provider_setup') ?></h2>

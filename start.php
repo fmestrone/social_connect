@@ -117,7 +117,12 @@ function social_connect_handle_authentication($user_profile, $provider) {
 		$user->password = generate_user_password($user, $password);
 		$user->owner_guid = 0;
 		$user->container_guid = 0;
-		if ( !$user->save() ) {
+		if ( $user->save() ) {
+			if ( elgg_get_plugin_setting('notify_new_user', 'social_connect') ) {
+				$email = elgg_echo('email:social_connect:body', array($userlogin, $password));
+				notify_user($user->guid, $CONFIG->site->guid, elgg_echo('email:social_connect:subject', array($provider_name)), $email, NULL, 'email');
+			}
+		} else {
 			register_error(sprintf(elgg_echo('social_connect:register:bad'), $provider_name));
 			return;
 		}
