@@ -118,8 +118,9 @@ function social_connect_handle_authentication($user_profile, $provider) {
 		$user->owner_guid = 0;
 		$user->container_guid = 0;
 		if ( $user->save() ) {
-			if ( elgg_get_plugin_setting('notify_new_user', 'social_connect') ) {
+			if ( $user->email && elgg_get_plugin_setting('notify_new_user', 'social_connect') ) {
 				$email = elgg_echo('email:social_connect:body', array($userlogin, $password));
+				set_user_notification_setting($user->getGUID(), 'email', true);
 				notify_user($user->guid, $CONFIG->site->guid, elgg_echo('email:social_connect:subject', array($provider_name)), $email, NULL, 'email');
 			}
 		} else {
