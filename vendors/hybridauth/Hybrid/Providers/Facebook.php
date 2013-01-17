@@ -33,6 +33,10 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 
 		$this->api = new Facebook( ARRAY( 'appId' => $this->config["keys"]["id"], 'secret' => $this->config["keys"]["secret"] ) ); 
 
+		if ( $this->params['SocialConnect_SSL_Hack'] == true ) {
+			Facebook::$CURL_OPTS['CURLOPT_SSL_VERIFYPEER'] = false;
+		}
+
 		if ( $this->token("access_token") ) { 
 			$access_token = $this->api->extendedAccessToken( $this->token("access_token") );
 

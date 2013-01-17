@@ -162,6 +162,27 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 		</table>
 	</div>
 
+	<br />
+	<h2 class="social_connect_settings_header"><?php echo elgg_echo('social_connect:settings:advanced') ?></h2>
+	<div class="social_connect_settings_box">
+		<table width="100%">
+			<tr>
+				<td width="25%">
+					<b><?php echo elgg_echo('social_connect:settings:facebook_ssl') ?></b>
+				</td>
+				<td width="38%">
+					<select style="height:22px;margin: 3px;" name="params[facebook_ssl_hack]">
+						<option value="0" <?php if( !$vars['entity']->facebook_ssl_hack ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:no'); ?></option>
+						<option value="1" <?php if( $vars['entity']->facebook_ssl_hack ) echo "selected"; ?>><?php echo elgg_echo('social_connect:settings:yes'); ?></option>
+					</select>
+				</td>
+				<td width="37%">
+					&nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:facebook_ssl_explain') ?>
+				</td>
+			</tr>
+		</table>
+	</div>
+
 <br />
 	<h2 class="social_connect_settings_header"><?php echo elgg_echo('social_connect:settings:provider_setup') ?></h2>
 	<p style="margin:10px;">

@@ -116,17 +116,18 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 	if ( ($appsecret = elgg_get_plugin_setting("ha_settings_{$provider}_app_secret", 'social_connect')) ) {
 		$providerConfig['keys']['secret'] = $appsecret;
 	}
-	
+
+	$provider_params = null;
+
 	// if facebook
 	if ( $provider == 'Facebook' ) {
 		$providerConfig['display'] = 'popup';
+		$provider_params = array('SocialConnect_SSL_Hack' => elgg_get_plugin_setting('facebook_ssl_hack', 'social_connect'));
 	}
 
     // if openid
     if ( $provider == 'OpenID' ) {
         $provider_params = array('openid_identifier' => elgg_get_plugin_setting('ha_settings_OpenID_url', 'social_connect'));
-    } else {
-        $provider_params = null;
     }
 
 	$config['providers'] = array($provider => $providerConfig);
