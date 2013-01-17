@@ -3,9 +3,13 @@ elgg_register_event_handler('init', 'system', 'social_connect_init');
 
 function social_connect_init() {
     // add connect form after login form
-	elgg_extend_view('forms/login'   , 'social_connect/connect', 501);
+	if ( !elgg_get_plugin_setting('social_bar_hide_login', 'social_connect') ) {
+		elgg_extend_view('forms/login'   , 'social_connect/connect', 501);
+	}
     // add connect form before register form
-	elgg_extend_view('forms/register', 'social_connect/connect', 499);
+	if ( !elgg_get_plugin_setting('social_bar_hide_register', 'social_connect') ) {
+		elgg_extend_view('forms/register', 'social_connect/connect', 499);
+	}
     // extend admin style sheet
 	elgg_extend_view('css/admin'     , 'social_connect/admincss');
     // extend main style sheet

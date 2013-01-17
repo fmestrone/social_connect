@@ -141,6 +141,45 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 		</table>
 	</div>
 
+<?php
+$check_vars_login = array(
+	'name'=>'params[social_bar_hide_login]',
+	'style'=>'height:22px;margin: 3px;',
+	'default' => '1',
+	'value' => '0',
+);
+if ( !$vars['entity']->social_bar_hide_login ) {
+	$check_vars_login['checked'] = 'checked';
+}
+$check_vars_register = array(
+	'name'=>'params[social_bar_hide_register]',
+	'style'=>'height:22px;margin: 3px;',
+	'default' => '1',
+	'value' => '0',
+);
+if ( !$vars['entity']->social_bar_hide_register ) {
+	$check_vars_register['checked'] = 'checked';
+}
+?>
+	<div class="social_connect_settings_box">
+		<table width="100%">
+			<tr>
+				<td width="25%">
+					<b><?php echo elgg_echo('social_connect:settings:avail') ?></b>
+				</td>
+				<td width="38%">
+					<?php echo elgg_view('input/checkbox', $check_vars_login); ?> <?php echo elgg_echo('social_connect:settings:avail_login'); ?><br/>
+					<?php echo elgg_view('input/checkbox', $check_vars_register); ?> <?php echo elgg_echo('social_connect:settings:avail_register'); ?><br/>
+				</td>
+				<td width="37%">
+					&nbsp;&nbsp; <?php echo elgg_echo('social_connect:settings:avail_explain') ?>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<br />
+	<h2 class="social_connect_settings_header"><?php echo elgg_echo('social_connect:settings:advanced') ?></h2>
 	<div class="social_connect_settings_box">
 		<table width="100%">
 			<tr>
@@ -162,8 +201,6 @@ if ( !session_id() || !version_compare(PHP_VERSION, '5.2.0', '>=') || !function_
 		</table>
 	</div>
 
-	<br />
-	<h2 class="social_connect_settings_header"><?php echo elgg_echo('social_connect:settings:advanced') ?></h2>
 	<div class="social_connect_settings_box">
 		<table width="100%">
 			<tr>
