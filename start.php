@@ -34,7 +34,10 @@ function social_connect_handle_authentication($user_profile, $provider) {
 	global $CONFIG;
     global $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG;
 
-    $ignore_access = elgg_get_ignore_access();
+	$social_connect_cant_register = elgg_get_plugin_setting('social_bar_hide_register', 'social_connect');
+	$social_connect_cant_login = elgg_get_plugin_setting('social_bar_hide_login', 'social_connect');
+
+	$ignore_access = elgg_get_ignore_access();
 
 	$provider_name = $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider]['provider_name'];
 	$user_uid = $user_profile->identifier;
@@ -74,6 +77,10 @@ function social_connect_handle_authentication($user_profile, $provider) {
 	$users = elgg_get_entities_from_plugin_user_settings($options);
 
 	if ( !$users ) { // user has not connected with plugin before
+		if ( $social_connect_cant_register ) {
+			system_message(elgg_echo('social_connect:register:not_allowed'));
+			return;
+		}
 		$args['mode'] = 'connect';
         elgg_set_ignore_access(true);
         $proceed = elgg_trigger_plugin_hook('social_connect', 'user', $args, $default_proceed);
@@ -139,6 +146,10 @@ function social_connect_handle_authentication($user_profile, $provider) {
         elgg_trigger_event('social_connect', 'user', $args);
         elgg_set_ignore_access($ignore_access);
 	} elseif ( count($users) == 1 ) { // one user has already been registered on Elgg with this provider
+		if ( $social_connect_cant_login ) {
+			system_message(elgg_echo('social_connect:login:not_allowed'));
+			return;
+		}
 		$args['mode'] = 'login';
 		$args['user'] = $users[0];
         elgg_set_ignore_access(true);

@@ -7,7 +7,7 @@ define('SOCIAL_CONNECT_DEFAULT_PROCEED', true);
  */
 require_once(dirname(dirname(dirname(__FILE__))) . '/engine/start.php');
 
-// well, dont need theses
+// well, don't need theses
 restore_error_handler();
 restore_exception_handler();
 
@@ -20,14 +20,20 @@ $provider = @trim(strip_tags($_GET['provider']));
 require "{$assets_base_path}settings.php";
 $provider_name = $HA_SOCIAL_CONNECT_PROVIDERS_CONFIG[$provider]['provider_name'];
 
+// if can't login and can't register, might as well die here
+if ( elgg_get_plugin_setting('social_bar_hide_register', 'social_connect') && elgg_get_plugin_setting('social_bar_hide_login', 'social_connect') ) {
+	?>
+	<table width="100%" border="0">
+		<tr>
+			<td align="center"><br /><h3><?php echo elgg_echo('social_connect:connect:all_disabled'); ?></h3><br /></td>
+		</tr>
+	</table>
+	<?php
+	die;
+}
+
 // let's display a loading message... better than a white screen
 if ( isset($_GET['provider']) && !isset($_GET['redirect_to_provider']) ) {
-
-/**
- * Display stand-in message and reload on timer
- */
-	// selected provider 
-
 	$_SESSION['HA::STORE'] = array();
 	?>
 	<table width="100%" border="0">
@@ -46,12 +52,11 @@ if ( isset($_GET['provider']) && !isset($_GET['redirect_to_provider']) ) {
 	</script>
 	<?php
 	die();
-} // end display loading 
+}
 
 
-
-/**
- * Reloaded page - check requirements
+/*
+ * Phase 2 - after reloading of page from loading message
  */
 
 // if user select a provider to login with 
