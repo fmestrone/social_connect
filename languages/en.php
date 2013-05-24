@@ -58,6 +58,15 @@ $localized = array(
 	'social_connect:connect:connect_with' => 'Or connect with ',
 	'social_connect:connect:privacy' => 'Privacy',
 	'social_connect:connect:all_disabled' => 'Sorry, all features of Social Connect have been disabled by the website administrator',
+
+	'social_connect:error:title' => 'Something went wrong',
+	'social_connect:error:unknown' => 'Unspecified error.',
+	'social_connect:error:hybrid_auth_configuration' => 'HybridAuth configuration error.',
+	'social_connect:error:provider_configuration' => 'Provider not properly configured.',
+	'social_connect:error:invalid_provider' => 'Unknown or disabled provider.',
+	'social_connect:error:missing_credentials' => 'Missing provider application credentials.',
+	'social_connect:error:connection_refused' => 'Authentification failed. The user has canceled the authentication or the provider refused the connection.',
+
 	'social_connect:register:bad' => 'Could not register with %s',
 	'social_connect:register:ok' => 'A new Elgg user account has been created from your %s account.',
 	'social_connect:register:not_allowed' => 'Registering via Social Connect is not allowed on this site',

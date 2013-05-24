@@ -92,7 +92,7 @@ function social_connect_handle_authentication($user_profile, $provider) {
 			$useremail = $user_profile->email;
 			if ( $useremail && ($users = get_user_by_email($useremail)) ) {
 				social_connect_user($user_uid, $users[0], $user_profile, $provider);
-				system_message(sprintf(elgg_echo('social_connect:connect:ok'), $provider_name));
+				system_message(elgg_echo('social_connect:connect:ok', array($provider_name)));
 				$args['mode'] = 'email';
 				$args['user'] = $users[0];
                 elgg_set_ignore_access(true);
@@ -101,7 +101,7 @@ function social_connect_handle_authentication($user_profile, $provider) {
 				return;
 			}
 			if ( $proceed === 'emailOnly' ) { // hook wants only email address connection or failure
-				register_error(sprintf(elgg_echo('social_connect:connect:emailnotfound'), $proceed));
+				register_error(elgg_echo('social_connect:connect:emailnotfound', array($proceed)));
 				return;
 			}
 		}
@@ -135,10 +135,10 @@ function social_connect_handle_authentication($user_profile, $provider) {
 				notify_user($user->guid, $CONFIG->site->guid, elgg_echo('email:social_connect:subject', array($provider_name)), $email, NULL, 'email');
 			}
 		} else {
-			register_error(sprintf(elgg_echo('social_connect:register:bad'), $provider_name));
+			register_error(elgg_echo('social_connect:register:bad', array($provider_name)));
 			return;
 		}
-		system_message(sprintf(elgg_echo('social_connect:register:ok'), $provider_name));
+		system_message(elgg_echo('social_connect:register:ok', array($provider_name)));
 		social_connect_user($user_uid, $user, $user_profile, $provider);
         $args['mode'] = 'register';
         $args['user'] = $user;
@@ -155,11 +155,11 @@ function social_connect_handle_authentication($user_profile, $provider) {
         elgg_set_ignore_access(true);
 		if ( elgg_trigger_plugin_hook('social_connect', 'user', $args, (bool)$default_proceed) ) {   // if not, hook prevented social connection
 			login($users[0]);
-			system_message(sprintf(elgg_echo('social_connect:login:ok'), $provider_name));
+			system_message(elgg_echo('social_connect:login:ok', array($provider_name)));
 		}
         elgg_set_ignore_access($ignore_access);
 	} else {
-		throw new Exception(sprintf(elgg_echo('social_connect:login:bad'), $provider_name));
+		throw new Exception(elgg_echo('social_connect:login:bad', array($provider_name)));
 	} 
 }
 

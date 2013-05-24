@@ -44,7 +44,7 @@ if ( isset($_GET['provider']) && !isset($_GET['redirect_to_provider']) ) {
 		<td align="center"><br /><h3><?php echo elgg_echo('social_connect:authenticate:loading'); ?></h3><br /></td>
 	  </tr>
 	  <tr>
-		<td align="center"><?php echo sprintf(elgg_echo('social_connect:authenticate:contacting'), $provider_name); ?></td>
+		<td align="center"><?php echo elgg_echo('social_connect:authenticate:contacting', array($provider_name)); ?></td>
 	  </tr>
 	</table>
 	<script> 
@@ -161,15 +161,15 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 		</html>
 	<?php
 	} catch ( Exception $e ) {
-		$message = 'Unspecified error!';
+		$message = 'social_connect:error:unknown';
 		switch ( $e->getCode() ) {
-			case 0 : $message = 'Unspecified error.'; break;
-			case 1 : $message = 'HybridAuth configuration error.'; break;
-			case 2 : $message = 'Provider not properly configured.'; break;
-			case 3 : $message = 'Unknown or disabled provider.'; break;
-			case 4 : $message = 'Missing provider application credentials.'; break;
-			case 5 : $message = 'Authentification failed. The user has canceled the authentication or the provider refused the connection.'; break;
-		}  
+			case 0 : $message = 'social_connect:error:unknown'; break;
+			case 1 : $message = 'social_connect:error:hybrid_auth_configuration'; break;
+			case 2 : $message = 'social_connect:error:provider_configuration'; break;
+			case 3 : $message = 'social_connect:error:invalid_provider'; break;
+			case 4 : $message = 'social_connect:error:missing_credentials'; break;
+			case 5 : $message = 'social_connect:error:connection_refused'; break;
+		}
 		?>
 		<style> 
 		HR {
@@ -184,10 +184,10 @@ if ( isset($_GET['provider']) && isset($_GET['redirect_to_provider']) ) {
 			<td align="center"><br /><img src="<?php echo $assets_base_url ; ?>graphics/alert.png" /></td>
 		  </tr>
 		  <tr>
-			<td align="center"><br /><h3>Something bad happen!</h3><br /></td> 
+			<td align="center"><br /><h3><?php echo elgg_echo('social_connect:error:title'); ?></h3><br /></td>
 		  </tr>
 		  <tr>
-			<td align="center">&nbsp;<?php echo $message ; ?></td> 
+			<td align="center">&nbsp;<?php echo elgg_echo($message) ; ?></td>
 		  </tr>
 		<?php 
 			if ( elgg_get_plugin_setting('ha_settings_test_mode', 'social_connect') ) {
